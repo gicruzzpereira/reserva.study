@@ -1,0 +1,15 @@
+# Reserva Study - configurações do Apache (XAMPP)
+
+# Página de erro própria. O caminho é relativo à raiz do servidor:
+# ajuste se a pasta do projeto em htdocs tiver outro nome.
+ErrorDocument 404 /study-reserva/404.php
+
+# Não listar o conteúdo das pastas
+Options -Indexes
+
+# Bloquear acesso direto a arquivos internos
+<FilesMatch "(\.sql|\.md|example\.php|router\.php)$">
+    Require all denied
+</FilesMatch>
+
+RedirectMatch 404 ^/[^/]*/?(config|includes|database)/

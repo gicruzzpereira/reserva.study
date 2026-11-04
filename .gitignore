@@ -1,0 +1,13 @@
+# Configuração local (senha do banco e chave da API)
+config/config.php
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+
+# Capturas de testes
+.playwright-mcp/
+
+# Fotos de perfil enviadas pelos usuarios
+uploads/avatars/*
+!uploads/avatars/.htaccess

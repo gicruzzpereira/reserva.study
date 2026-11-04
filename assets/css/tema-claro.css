@@ -1,0 +1,112 @@
+/* =====================================================================
+   RESERVA STUDY - Ajustes do modo claro
+   Os tokens (tokens.css) já trocam fundos, textos e bordas. Aqui ficam só
+   os casos em que a cor da matéria ou um detalhe visual precisa de outro
+   tom sobre fundo claro para manter contraste e harmonia.
+   ===================================================================== */
+
+/* Transição suave ao alternar o tema (só durante a troca) */
+html.trocando-tema,
+html.trocando-tema *,
+html.trocando-tema *::before,
+html.trocando-tema *::after {
+    transition: background-color 260ms ease, color 260ms ease, border-color 260ms ease, box-shadow 260ms ease !important;
+}
+
+/* ---------------------------------------------------------------------
+   Cores das matérias: tons claros (amarelo, ciano...) escurecidos quando
+   viram texto, e fundos tingidos mais suaves
+   --------------------------------------------------------------------- */
+[data-tema="claro"] .chip-materia {
+    color: color-mix(in srgb, var(--cor) 42%, #0C2A3D);
+    background: color-mix(in srgb, var(--cor) 22%, #FFFFFF);
+    border-color: color-mix(in srgb, var(--cor) 65%, #FFFFFF);
+}
+
+[data-tema="claro"] .chip-materia__ponto {
+    background: color-mix(in srgb, var(--cor) 80%, #0C2A3D);
+}
+
+[data-tema="claro"] .lista-item__icone,
+[data-tema="claro"] .stat__icone {
+    color: color-mix(in srgb, var(--cor, var(--accent)) 55%, #0C2A3D);
+}
+
+[data-tema="claro"] .materia-opcao__icone,
+[data-tema="claro"] .materia-opcao input:checked + .materia-opcao__card .materia-opcao__check {
+    color: #0C2A3D;
+}
+
+[data-tema="claro"] .faixa-materia,
+[data-tema="claro"] .agenda__bloco,
+[data-tema="claro"] .bloco-mini {
+    border-left-color: color-mix(in srgb, var(--cor, var(--accent)) 82%, #0C2A3D);
+}
+
+[data-tema="claro"] .agenda__bloco {
+    background: color-mix(in srgb, var(--cor, var(--accent)) 18%, #FFFFFF);
+}
+
+[data-tema="claro"] .agenda__bloco:hover {
+    background: color-mix(in srgb, var(--cor, var(--accent)) 28%, #FFFFFF);
+}
+
+[data-tema="claro"] .bloco-mini {
+    background: color-mix(in srgb, var(--cor) 20%, #FFFFFF);
+}
+
+[data-tema="claro"] .donut__anel {
+    background: conic-gradient(color-mix(in srgb, var(--cor, var(--accent)) 85%, #0C2A3D) calc(var(--p) * 1%), var(--bg-elevated) 0);
+}
+
+[data-tema="claro"] .barra-materia__valor {
+    background: color-mix(in srgb, var(--cor) 85%, #0C2A3D);
+}
+
+/* ---------------------------------------------------------------------
+   Estrutura: superfícies brancas precisam de borda e sombra leve
+   --------------------------------------------------------------------- */
+[data-tema="claro"] .sidebar {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(231, 240, 245, 0.82));
+    box-shadow: var(--sombra-flutuante), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-tema="claro"] .kpi,
+[data-tema="claro"] .lista-item,
+[data-tema="claro"] .revisao-questao,
+[data-tema="claro"] .semana__dia,
+[data-tema="claro"] .plano {
+    box-shadow: var(--sombra-card);
+}
+
+/* Campos: borda visível sobre o branco (o foco continua laranja) */
+:where([data-tema="claro"]) .input,
+:where([data-tema="claro"]) .select,
+:where([data-tema="claro"]) .textarea,
+:where([data-tema="claro"]) .busca input {
+    border-color: var(--borda-forte);
+}
+
+[data-tema="claro"] .busca input { background: var(--bg-surface); }
+
+[data-tema="claro"] .pix-qr { border: 1px solid var(--borda-forte); }
+
+[data-tema="claro"] .btn--sucesso,
+[data-tema="claro"] .btn--sabia:hover { color: #FFFFFF; }
+
+/* 404: o gradiente claro do modo escuro sumiria sobre o branco */
+[data-tema="claro"] .erro-pagina__codigo {
+    background: linear-gradient(120deg, var(--azul) 0%, var(--profundo) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* ---------------------------------------------------------------------
+   Botão de alternar tema: mostra o sol no escuro e a lua no claro
+   --------------------------------------------------------------------- */
+.botao-tema .icone-lua { display: none; }
+[data-tema="claro"] .botao-tema .icone-sol { display: none; }
+[data-tema="claro"] .botao-tema .icone-lua { display: block; }
+
+.botao-tema .icone { transition: transform 400ms cubic-bezier(0.3, 0.7, 0.2, 1); }
+.botao-tema:hover .icone { transform: rotate(-20deg); }

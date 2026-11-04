@@ -1,0 +1,181 @@
+/* =====================================================================
+   RESERVA STUDY - Design tokens
+   Paleta oficial: #A8E8F9 #00537A #013C58 #F5A201 #FFBA42 #FFD35B
+   Toda cor do sistema sai daqui. As versões "-rgb" servem para
+   transparências: rgba(var(--accent-rgb), 0.2).
+   ===================================================================== */
+
+:root {
+    /* Cores da paleta */
+    --ciano: #A8E8F9;
+    --azul: #00537A;
+    --profundo: #013C58;
+    --laranja: #F5A201;
+    --ambar: #FFBA42;
+    --amarelo: #FFD35B;
+
+    /* Canais RGB para transparências */
+    --base-rgb: 1, 39, 58;
+    --surface-rgb: 1, 60, 88;
+    --elevated-rgb: 0, 83, 122;
+    --accent-rgb: 245, 162, 1;
+    --ciano-rgb: 168, 232, 249;
+    --amarelo-rgb: 255, 211, 91;
+    --danger-rgb: 229, 72, 77;
+    --success-rgb: 92, 196, 138;
+    --texto-rgb: 244, 251, 254;
+    --linha-rgb: 168, 232, 249;    /* bordas, divisórias e hovers sutis */
+
+    /* Fundos (do mais escuro ao mais claro) */
+    --bg-base: #01273A;        /* fundo da página (tom mais escuro de #013C58) */
+    --bg-surface: #013C58;     /* cards e painéis */
+    --bg-elevated: #00537A;    /* inputs, hover, elementos elevados */
+    --bg-hover: #0A6390;       /* hover de elementos elevados */
+
+    /* Destaques */
+    --accent: #F5A201;         /* botões, links, item ativo */
+    --accent-hover: #FFBA42;
+    --accent-suave: rgba(var(--accent-rgb), 0.14);
+    --destaque: #FFD35B;       /* realces pontuais */
+    --danger: #E5484D;         /* erros, respostas erradas, exclusões (fora da paleta, por necessidade) */
+    --danger-claro: #FF7B7E;   /* texto de erro legível sobre fundo escuro */
+    --danger-suave: rgba(var(--danger-rgb), 0.18);
+    --success: #5CC48A;        /* respostas certas (fora da paleta, por necessidade) */
+    --success-suave: rgba(var(--success-rgb), 0.15);
+    --aviso: #FFD35B;
+
+    /* Versões para TEXTO (no modo claro ficam mais escuras para ter contraste) */
+    --accent-texto: #F5A201;
+    --success-texto: #5CC48A;
+
+    /* Texto */
+    --text-primary: #F4FBFE;
+    --text-secondary: #9CC4D6;
+    --text-sobre-accent: #013C58;
+    --text-sobre-claro: #013C58;   /* texto sobre ciano/amarelo */
+    --text-sobre-claro-suave: #2E6280;
+
+    /* Bordas e vidro (glassmorphism) */
+    --borda: rgba(var(--linha-rgb), 0.08);
+    --borda-forte: rgba(var(--linha-rgb), 0.18);
+    --hover-sutil: rgba(var(--linha-rgb), 0.07);
+    --sobreposicao: rgba(1, 39, 58, 0.7);          /* fundo atrás de modais */
+
+    /* Brilhos do fundo da página */
+    --brilho-topo: rgba(var(--elevated-rgb), 0.7);
+    --brilho-base: rgba(var(--ciano-rgb), 0.07);
+    --vidro: rgba(var(--surface-rgb), 0.55);
+    --vidro-blur: blur(18px) saturate(140%);
+
+    /* Gradientes */
+    /* Azul da paleta com um brilho âmbar no canto (sem misturar azul e laranja no meio, que vira verde) */
+    --gradiente-banner:
+        radial-gradient(120% 140% at 100% 100%, rgba(var(--accent-rgb), 0.95) 0%, rgba(255, 186, 66, 0.55) 22%, transparent 48%),
+        linear-gradient(120deg, var(--profundo) 0%, var(--azul) 70%);
+
+    /* Raios */
+    --raio-card: 20px;
+    --raio-controle: 12px;
+    --raio-pilula: 999px;
+
+    /* Espaçamentos */
+    --esp-1: 4px;
+    --esp-2: 8px;
+    --esp-3: 12px;
+    --esp-4: 16px;
+    --esp-5: 24px;
+    --esp-6: 32px;
+    --esp-7: 48px;
+
+    /* Tipografia: Plus Jakarta Sans no texto, Bricolage Grotesque em títulos e números */
+    --fonte: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --fonte-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 0.9375rem;
+    --fs-md: 1.0625rem;
+    --fs-lg: 1.375rem;
+    --fs-xl: 1.75rem;
+    --fs-2xl: 2.5rem;
+
+    /* Sombras (tingidas com o azul do fundo) */
+    --sombra-card: 0 1px 0 rgba(var(--ciano-rgb), 0.04) inset, 0 12px 24px -18px rgba(0, 16, 26, 0.9);
+    --sombra-flutuante: 0 20px 50px -15px rgba(0, 14, 24, 0.8);
+
+    /* Movimento */
+    --transicao: 200ms cubic-bezier(0.2, 0.7, 0.3, 1);
+
+    /* Layout */
+    --sidebar-largura: 76px;
+    --sidebar-margem: 20px;
+    --conteudo-max: 1440px;
+
+    color-scheme: dark;
+}
+
+/* =====================================================================
+   MODO CLARO
+   Mesma paleta: fundos claros com toque de ciano, texto em azul-marinho
+   derivado de #013C58 e o laranja como cor de ação.
+   ===================================================================== */
+:root[data-tema="claro"] {
+    --base-rgb: 242, 247, 250;
+    --surface-rgb: 255, 255, 255;
+    --elevated-rgb: 231, 240, 245;
+    --texto-rgb: 12, 42, 61;
+    --linha-rgb: 1, 60, 88;
+
+    --bg-base: #F2F7FA;
+    --bg-surface: #FFFFFF;
+    --bg-elevated: #E7F0F5;
+    --bg-hover: #D8E7EF;
+
+    --accent-texto: #9A5B00;        /* laranja escurecido: legível sobre branco */
+    --success: #2E9E62;
+    --success-texto: #1F7F4A;
+    --success-suave: rgba(46, 158, 98, 0.12);
+    --aviso: #9A6400;
+    --danger-claro: #C62F35;
+    --danger-suave: rgba(var(--danger-rgb), 0.11);
+
+    --text-primary: #0C2A3D;
+    --text-secondary: #557083;
+
+    --borda: rgba(var(--linha-rgb), 0.09);
+    --borda-forte: rgba(var(--linha-rgb), 0.17);
+    --hover-sutil: rgba(var(--linha-rgb), 0.05);
+    --sobreposicao: rgba(1, 39, 58, 0.45);
+
+    --brilho-topo: rgba(var(--ciano-rgb), 0.5);
+    --brilho-base: rgba(var(--amarelo-rgb), 0.16);
+
+    --sombra-card: 0 1px 2px rgba(1, 39, 58, 0.05), 0 10px 24px -18px rgba(1, 39, 58, 0.28);
+    --sombra-flutuante: 0 18px 44px -18px rgba(1, 39, 58, 0.35);
+
+    color-scheme: light;
+}
+
+/* =====================================================================
+   ILHAS DE MARCA
+   Áreas com o gradiente azul da marca continuam escuras nos dois temas.
+   Redefinir os tokens aqui faz tudo que está dentro delas se adaptar.
+   ===================================================================== */
+.banner,
+.cartao-preview,
+.perfil-topo,
+.simulado-geral,
+.entrada__foto {
+    --text-primary: #F4FBFE;
+    --text-secondary: #A9CBDA;
+    --texto-rgb: 244, 251, 254;
+    --base-rgb: 1, 39, 58;
+    --surface-rgb: 1, 60, 88;
+    --elevated-rgb: 0, 83, 122;
+    --linha-rgb: 168, 232, 249;
+    --bg-surface: #013C58;
+    --bg-elevated: #00537A;
+    --accent-texto: #F5A201;
+    --borda: rgba(168, 232, 249, 0.08);
+    --borda-forte: rgba(168, 232, 249, 0.18);
+    color: var(--text-primary);
+}
