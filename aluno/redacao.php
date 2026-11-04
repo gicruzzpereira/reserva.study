@@ -373,10 +373,26 @@ require RAIZ_APP . '/includes/layout_inicio.php';
                     <h2 class="card__titulo">Estrutura sugerida</h2>
                 </div>
                 <ol class="estrutura">
-                    <li><b>Introdução</b><span>Contextualize o tema e apresente sua tese.</span></li>
-                    <li><b>Desenvolvimento 1</b><span>Primeiro argumento, com repertório (lei, dado, autor, fato histórico).</span></li>
-                    <li><b>Desenvolvimento 2</b><span>Segundo argumento, ligado ao primeiro por conectivos.</span></li>
-                    <li><b>Conclusão</b><span>Proposta de intervenção: quem faz, o quê, como, para quê e um detalhe.</span></li>
+                    <li>
+                        <b>1. Introdução</b>
+                        <span>Apresente o tema e contextualize sua importância. Indique claramente sua tese e os dois eixos argumentativos que serão desenvolvidos. Evite clichês como "desde os primórdios" e não antecipe toda a conclusão.</span>
+                    </li>
+                    <li>
+                        <b>2. Desenvolvimento 1</b>
+                        <span>Retome a tese. Apresente um argumento principal, explique sua relação com o tema e justifique com repertório legítimo, como lei, dado estatístico, fato histórico ou referência cultural. Em seguida, analise as consequências desse problema e conecte a explicação à tese.</span>
+                    </li>
+                    <li>
+                        <b>3. Desenvolvimento 2</b>
+                        <span>Apresente um segundo fator diferente do primeiro, conectado por expressões como "Além disso", "Em outra dimensão" ou "Nesse contexto". Confronte o problema com a realidade, explique suas causas ou efeitos e apresente outro repertório sociocultural. Evite repetir ideias e amplie a análise crítica.</span>
+                    </li>
+                    <li>
+                        <b>4. Conclusão</b>
+                        <span>Retome a tese e sintetize os principais argumentos. Elabore uma proposta de intervenção detalhada, respondendo a quem atua, o que deve ser feito, como a ação será realizada, qual efeito se espera e qual recurso, meio ou medida ajuda na execução.</span>
+                    </li>
+                    <li>
+                        <b>5. Conferência final</b>
+                        <span>Verifique: conexão entre os repertórios e argumentos; autor, dado ou legislação usados com precisão; progressão entre parágrafos; propostas que respeitam os direitos humanos; gramática, pontuação, coesão, variedade vocabular e total estimado de <?= REDACAO_MIN_LINHAS ?> a <?= REDACAO_MAX_LINHAS ?> linhas.</span>
+                    </li>
                 </ol>
                 <p class="texto-xs texto-secundario mt-4">Entre <?= REDACAO_MIN_LINHAS ?> e <?= REDACAO_MAX_LINHAS ?> linhas. O rascunho é salvo sozinho enquanto você escreve.</p>
             </section>

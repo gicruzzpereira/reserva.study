@@ -43,4 +43,14 @@
     });
 
     atualizar();
+
+    const lingua = document.getElementById('lingua-enem');
+    const linkLinguagens = document.getElementById('btn-simulado-linguagens');
+    if (lingua && linkLinguagens) {
+        lingua.addEventListener('change', () => {
+            const url = new URL(linkLinguagens.href, window.location.origin);
+            url.searchParams.set('lingua', lingua.value);
+            linkLinguagens.href = url.pathname + url.search;
+        });
+    }
 })();

@@ -84,8 +84,19 @@ require RAIZ_APP . '/includes/layout_inicio.php';
                 <li><span class="numero"><?= $n + 1 ?></span><?= e($area) ?></li>
             <?php endforeach; ?>
         </ol>
-        <a class="btn btn--primario btn--bloco" href="<?= e(url('aluno/simulado.php?modo=geral&qtd=' . SIMULADO_ENEM_TOTAL)) ?>">
-            Começar simulado ENEM <?= icone('seta-direita', 'icone--sm') ?>
+        <label class="texto-pequeno" for="lingua-enem">Língua estrangeira</label>
+        <select class="input" id="lingua-enem" style="margin: 8px 0;">
+            <option value="ingles">Inglês</option>
+            <option value="espanhol">Espanhol</option>
+        </select>
+        <a class="btn btn--primario btn--bloco" id="btn-simulado-linguagens" href="<?= e(url('aluno/simulado.php?modo=linguagens&lingua=ingles')) ?>">
+            Simulado de Linguagens <?= icone('seta-direita', 'icone--sm') ?>
+        </a>
+        <a class="btn btn--secundario btn--bloco" href="<?= e(url('aluno/simulado.php?modo=exatas')) ?>">
+            Simulado de Exatas e Natureza <?= icone('seta-direita', 'icone--sm') ?>
+        </a>
+        <a class="simulado-geral__ultimo" href="<?= e(url('aluno/simulado.php?modo=geral&qtd=' . SIMULADO_ENEM_TOTAL)) ?>">
+            Simulado geral completo: <?= SIMULADO_ENEM_TOTAL ?> questões
         </a>
         <a class="simulado-geral__ultimo" href="<?= e(url('aluno/simulado.php?modo=geral&qtd=' . SIMULADO_GERAL_TOTAL)) ?>">
             Versão rápida: <?= SIMULADO_GERAL_TOTAL ?> questões

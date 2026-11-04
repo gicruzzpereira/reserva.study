@@ -51,9 +51,12 @@ const SIMULADO_ENEM_TOTAL = 90;
 /** Opções disponíveis para o simulado geral. */
 const QTD_SIMULADO_GERAL = [35, 90];
 
+/** Quantidade padrão dos simulados por área. */
+const SIMULADO_AREA_TOTAL = 90;
+
 /** Ordem das matérias no simulado geral, por área do ENEM. */
 const ORDEM_AREAS = [
-    'Português' => 'Linguagens',
+    'Português' => 'Linguagens', 'Inglês' => 'Linguagens', 'Espanhol' => 'Linguagens',
     'História' => 'Ciências Humanas', 'Geografia' => 'Ciências Humanas', 'Filosofia' => 'Ciências Humanas', 'Sociologia' => 'Ciências Humanas',
     'Biologia' => 'Ciências da Natureza', 'Química' => 'Ciências da Natureza', 'Física' => 'Ciências da Natureza',
     'Matemática' => 'Matemática',
@@ -64,6 +67,54 @@ const ORDEM_AREAS = [
  * corrigido na hora), repartidas por igual entre as matérias e agrupadas
  * por área, como no ENEM. Devolve a lista de ids na ordem da prova.
  */
+function sortear_por_materias(array $nomes, int $total): array
+{
+    $placa = implode(',', array_fill(0, count($nomes), '?'));
+    $stmt = db()->prepare(
+        "SELECT m.id, m.nome, COUNT(q.id) AS total FROM materias m
+           JOIN questoes q ON q.materia_id = m.id AND q.tipo = 'multipla'
+          WHERE m.nome IN ($placa)
+          GROUP BY m.id HAVING total > 0"
+    );
+    $stmt->execute($nomes);
+    $disponiveis = $stmt->fetchAll();
+    if (!$disponiveis) return [];
+
+    $cotas = [];
+    $base = intdiv($total, count($disponiveis));
+    foreach ($disponiveis as $materia) {
+        $cotas[$materia['id']] = min($base, (int) $materia['total']);
+    }
+
+    $sobra = $total - array_sum($cotas);
+    $ordem = $disponiveis;
+    shuffle($ordem);
+    while ($sobra > 0) {
+        $alterou = false;
+        foreach ($ordem as $materia) {
+            if ($sobra > 0 && $cotas[$materia['id']] < (int) $materia['total']) {
+                $cotas[$materia['id']]++;
+                $sobra--;
+                $alterou = true;
+            }
+        }
+        if (!$alterou) break;
+    }
+
+    $posicao = array_flip($nomes);
+    usort($disponiveis, fn($a, $b) => [$posicao[$a['nome']] ?? 99, $a['nome']] <=> [$posicao[$b['nome']] ?? 99, $b['nome']]);
+
+    $ids = [];
+    $selecionar = db()->prepare("SELECT id FROM questoes WHERE materia_id = ? AND tipo = 'multipla' ORDER BY RAND() LIMIT ?");
+    foreach ($disponiveis as $materia) {
+        $selecionar->bindValue(1, (int) $materia['id'], PDO::PARAM_INT);
+        $selecionar->bindValue(2, $cotas[$materia['id']], PDO::PARAM_INT);
+        $selecionar->execute();
+        array_push($ids, ...array_map('intval', $selecionar->fetchAll(PDO::FETCH_COLUMN)));
+    }
+    return $ids;
+}
+
 function sortear_simulado_geral(int $total = SIMULADO_GERAL_TOTAL): array
 {
     $disponiveis = db()->query(

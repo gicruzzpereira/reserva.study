@@ -31,6 +31,16 @@ $ultimos = $pdo->query(
       ORDER BY h.data_realizacao DESC LIMIT 8"
 )->fetchAll();
 
+$solicitacoes_senha = [];
+$existe_tabela_senha = $pdo->query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'solicitacoes_senha'")->fetchColumn();
+if ($existe_tabela_senha) {
+    $solicitacoes_senha = $pdo->query(
+        "SELECT s.id, s.email, s.criado_em, u.nome AS aluno
+           FROM solicitacoes_senha s LEFT JOIN usuarios u ON u.id = s.usuario_id
+          WHERE s.status = 'pendente' ORDER BY s.criado_em DESC LIMIT 8"
+    )->fetchAll();
+}
+
 $titulo_pagina = 'Painel administrativo';
 $pagina_ativa  = 'admin-painel';
 require RAIZ_APP . '/includes/layout_inicio.php';
@@ -66,6 +76,24 @@ require RAIZ_APP . '/includes/layout_inicio.php';
         <div class="kpi__detalhe">Feitos nos últimos 7 dias</div>
     </article>
 </div>
+
+<?php if ($solicitacoes_senha): ?>
+<div class="aviso aviso--aviso" style="margin-bottom: 20px;">
+    <?= icone('alerta', 'icone--sm') ?>
+    <span><b><?= count($solicitacoes_senha) ?> solicitação(ões) de recuperação de senha.</b> Lembre aos alunos que nenhuma senha deve ser compartilhada; as senhas são criptografadas.</span>
+</div>
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card__cabecalho"><h2 class="card__titulo">Alertas de recuperação de senha</h2></div>
+    <ul class="lista">
+        <?php foreach ($solicitacoes_senha as $s): ?>
+            <li class="linha linha--entre texto-pequeno">
+                <span><b><?= e($s['aluno'] ?: $s['email']) ?></b><br><span class="texto-secundario">Solicitou recuperação em <?= e(data_br($s['criado_em'], true)) ?></span></span>
+                <span class="selo selo--aviso">Pendente</span>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
 
 <div class="grade-lateral">
     <section class="card">

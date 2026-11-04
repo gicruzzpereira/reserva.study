@@ -8,7 +8,9 @@
  *
  * Modos:
  *   ?materia=ID&qtd=N     simulado por matéria (N = 5, 10 ou 15)
- *   ?modo=geral           simulado geral: 35 questões de todas as matérias
+ *   ?modo=geral           simulado geral completo
+ *   ?modo=linguagens      simulado de Linguagens; aceita &lingua=ingles|espanhol
+ *   ?modo=exatas          simulado de Exatas
  *   ?modo=caderno         refazer questões erradas (opcional &materia=ID)
  */
 require_once __DIR__ . '/../includes/bootstrap.php';
@@ -16,8 +18,8 @@ $usuario = exigir_login('aluno');
 $uid = (int) $usuario['id'];
 $pdo = db();
 
-$modo       = in_array($_GET['modo'] ?? '', ['caderno', 'geral'], true) ? $_GET['modo'] : 'normal';
-$materia_id = $modo === 'geral' ? 0 : (int) ($_GET['materia'] ?? 0);
+$modo       = in_array($_GET['modo'] ?? '', ['caderno', 'geral', 'linguagens', 'exatas'], true) ? $_GET['modo'] : 'normal';
+$materia_id = in_array($modo, ['geral', 'linguagens', 'exatas'], true) ? 0 : (int) ($_GET['materia'] ?? 0);
 $qtd        = (int) ($_GET['qtd'] ?? 5);
 $qtd        = in_array($qtd, QTD_POR_MATERIA, true) ? $qtd : 5;
 
@@ -35,6 +37,13 @@ if ($modo === 'normal') {
     $qtd_geral = (int) ($_GET['qtd'] ?? SIMULADO_GERAL_TOTAL);
     $qtd_geral = in_array($qtd_geral, QTD_SIMULADO_GERAL, true) ? $qtd_geral : SIMULADO_GERAL_TOTAL;
     $ids = sortear_simulado_geral($qtd_geral);
+} elseif ($modo === 'linguagens') {
+    $stmt = null;
+    $lingua = ($_GET['lingua'] ?? 'ingles') === 'espanhol' ? 'Espanhol' : 'Inglês';
+    $ids = sortear_por_materias(['Português', $lingua, 'História', 'Geografia', 'Filosofia', 'Sociologia'], SIMULADO_AREA_TOTAL);
+} elseif ($modo === 'exatas') {
+    $stmt = null;
+    $ids = sortear_por_materias(['Matemática', 'Física', 'Química', 'Biologia'], SIMULADO_AREA_TOTAL);
 } else {
     $stmt = $pdo->prepare(
         'SELECT q.id FROM caderno_erros c JOIN questoes q ON q.id = c.questao_id
@@ -89,7 +98,7 @@ $_SESSION['simulado'] = [
     'iniciado'   => time(),
 ];
 
-$titulo_pagina  = match ($modo) { 'caderno' => 'Refazendo erros', 'geral' => 'Simulado geral', default => 'Simulado de ' . $materia['nome'] };
+$titulo_pagina  = match ($modo) { 'caderno' => 'Refazendo erros', 'geral' => 'Simulado geral', 'linguagens' => 'Simulado de Linguagens', 'exatas' => 'Simulado de Exatas', default => 'Simulado de ' . $materia['nome'] };
 $pagina_ativa   = 'simulados';
 $scripts_extras = ['simulado.js'];
 require RAIZ_APP . '/includes/layout_inicio.php';

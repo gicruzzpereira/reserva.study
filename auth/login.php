@@ -69,13 +69,18 @@ require RAIZ_APP . '/includes/auth_moldura_inicio.php';
                         <span class="campo__erro"></span>
                     </div>
                     <div class="campo">
-                        <label class="campo__rotulo" for="senha">Senha</label>
+                        <div class="linha linha--entre" style="align-items: center; margin-bottom: 8px;">
+                            <label class="campo__rotulo" for="senha" style="margin: 0;">Senha</label>
+                            <a class="texto-xs" href="<?= e(url('auth/esqueci-senha.php')) ?>">Esqueci minha senha</a>
+                        </div>
                         <div class="campo-senha">
                             <input class="input" type="password" id="senha" name="senha" required autocomplete="current-password" placeholder="Sua senha">
                             <button type="button" class="botao-icone" data-mostrar-senha="senha" aria-label="Mostrar senha"><?= icone('olho', 'icone--sm') ?></button>
                         </div>
                         <span class="campo__erro"></span>
                     </div>
+
+                    <p class="texto-xs texto-secundario" style="margin: -8px 0 4px;">Por segurança, todas as senhas são criptografadas e não podem ser visualizadas.</p>
 
                     <button type="submit" class="btn btn--primario btn--bloco entrada__botao">Entrar</button>
 

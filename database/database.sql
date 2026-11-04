@@ -317,7 +317,9 @@ INSERT INTO materias (id, nome, descricao, cor, icone) VALUES
 (4, 'Biologia',   'Citologia, genética, ecologia, evolução e fisiologia.',              '#5CC48A', 'folha'),
 (5, 'História',   'História do Brasil e História Geral.',                               '#FF8A65', 'coluna'),
 (6, 'Geografia',  'Cartografia, climatologia, geopolítica e espaço urbano.',            '#4DA3FF', 'globo'),
-(7, 'Português',  'Gramática, interpretação de texto e literatura.',                    '#F78FC0', 'pena');
+(7, 'Português',  'Gramática, interpretação de texto e literatura.',                    '#F78FC0', 'pena'),
+(10, 'Inglês',    'Compreensão escrita, gramática e interpretação de textos em inglês.', '#60A5FA', 'livro'),
+(11, 'Espanhol',  'Compreensão escrita, gramática e interpretação de textos em espanhol.', '#FB7185', 'livro');
 
 -- ---------------------------------------------------------------------
 -- Questões — Matemática
@@ -647,7 +649,7 @@ INSERT IGNORE INTO temas_redacao (titulo, eixo, textos_motivadores) VALUES
 ('Caminhos para reduzir o desperdício de alimentos no Brasil', 'Meio ambiente',
  'Grande parte dos alimentos se perde entre a colheita, o transporte, o comércio e a casa do consumidor.\n\nEnquanto isso, milhões de pessoas convivem com a fome, o que torna o desperdício também uma questão social.'),
 ('O descarte inadequado do lixo eletrônico em questão', 'Meio ambiente',
- 'Celulares, pilhas e baterias contêm metais pesados que contaminam o solo e a água quando descartados no lixo comum.\n\nA Política Nacional de Resíduos Sólidos prevê a logística reversa, que responsabiliza fabricantes pelo recolhimento desses produtos.'),
+ 'Celulares, pilhas e baterias contêm metais pesados que contaminam o solo e a água quando descartados no lixo comum.\n\nA Política Nacional de Resíduos Sólidos prevê a logística reversa, que responsabiliza fabricantes pelo recolhimento desses produtos.\n\nDados da ONU indicam que apenas uma pequena parcela do lixo eletrônico mundial é coletada e reciclada de forma adequada.\n\nEnquanto isso, o consumo acelerado de aparelhos estimula a substituição frequente de dispositivos que ainda poderiam ter uma vida útil maior.'),
 ('Desafios para a preservação da Amazônia', 'Meio ambiente',
  'A Amazônia abriga uma enorme biodiversidade e influencia o regime de chuvas de várias regiões do país.\n\nO desmatamento ilegal, o garimpo e as queimadas ameaçam a floresta e os povos que vivem nela.'),
 ('A crise hídrica e o uso consciente da água no Brasil', 'Meio ambiente',
@@ -847,3 +849,51 @@ SELECT @m, t, e, a, b, c, d, r, g, n FROM (
     UNION ALL SELECT 'dissertativa', 'O que é cultura para a sociologia e por que ela não se resume a arte e erudição?', NULL, NULL, NULL, NULL, NULL, 'Para a sociologia, cultura é tudo o que um grupo cria e transmite: língua, costumes, crenças, valores, técnicas, culinária e formas de se vestir. Todos os grupos têm cultura; não existe povo "sem cultura" ou cultura superior, ideia que levaria ao etnocentrismo.', 'medio'
     UNION ALL SELECT 'dissertativa', 'Explique a diferença entre preconceito e discriminação e dê um exemplo.', NULL, NULL, NULL, NULL, NULL, 'Preconceito é um julgamento prévio e negativo sobre uma pessoa ou grupo, sem conhecimento real (está no campo das ideias). Discriminação é a ação que trata alguém de forma desigual por causa desse preconceito. Exemplo: achar que um candidato é menos capaz por ser negro é preconceito; não contratá-lo por isso é discriminação, que no Brasil pode ser crime.', 'medio'
 ) novas WHERE @n < 15;
+
+-- ---------------------------------------------------------------------
+-- Inglês
+-- ---------------------------------------------------------------------
+INSERT INTO materias (id, nome, descricao, cor, icone) VALUES
+(10, 'Inglês', 'Compreensão escrita, gramática e interpretação de textos em inglês.', '#60A5FA', 'livro');
+
+SET @ingles = (SELECT id FROM materias WHERE nome = 'Inglês');
+INSERT INTO questoes (materia_id, tipo, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, resposta_correta, gabarito_comentario, dificuldade) VALUES
+(@ingles, 'multipla', 'What is the past tense of the verb "go"?', 'goed', 'went', 'gone', 'goes', 'B', 'The verb "go" is irregular. Its past tense is "went".', 'facil'),
+(@ingles, 'multipla', 'Choose the correct sentence.', 'She dont like coffee.', 'She doesn''t likes coffee.', 'She doesn''t like coffee.', 'She not like coffee.', 'C', 'With "she", use the auxiliary "does" + "not" and the base verb: "doesn''t like".', 'medio'),
+(@ingles, 'multipla', 'What does the word "environment" mean?', 'ambiente', 'trabalho', 'viagem', 'dinheiro', 'A', '"Environment" means "ambiente" or "meio ambiente" in Portuguese.', 'facil'),
+(@ingles, 'multipla', 'Complete: "If it rains, we ___ stay home."', 'will', 'would', 'were', 'did', 'A', 'Use "if" + simple present and "will" in the result clause.', 'medio'),
+(@ingles, 'multipla', 'Which word is a synonym for "happy"?', 'sad', 'angry', 'glad', 'tired', 'C', '"Glad" is similar in meaning to "happy".', 'facil'),
+(@ingles, 'multipla', 'In "They have lived here for ten years", the verb form indicates:', 'an action completed in the past', 'an action from the past that continues now', 'an action happening at this moment', 'a future action', 'B', 'The present perfect shows duration from the past to the present.', 'dificil'),
+(@ingles, 'multipla', 'Choose the correct comparative form of "good".', 'gooder', 'more good', 'better', 'best', 'C', 'The irregular comparative of "good" is "better".', 'facil'),
+(@ingles, 'multipla', 'What is the plural of "child"?', 'childs', 'childrens', 'children', 'childes', 'C', '"Child" is irregular: its plural is "children".', 'facil'),
+(@ingles, 'multipla', 'Which sentence uses the present continuous correctly?', 'I am study English now.', 'I studying English now.', 'I am studying English now.', 'I study was now.', 'C', 'Use the verb "to be" + verb ending in "-ing": "am studying".', 'medio'),
+(@ingles, 'multipla', 'What does "although" introduce?', 'a concessive idea', 'a cause-effect sequence', 'a place', 'a comparison', 'A', '"Although" introduces a contrast or concession.', 'medio'),
+(@ingles, 'multipla', 'Choose the correct passive voice: "They publish the magazine monthly."', 'The magazine is published monthly.', 'The magazine published is monthly.', 'The magazine was publish monthly.', 'Monthly publishes the magazine.', 'A', 'Present simple passive uses "be" + past participle.', 'medio'),
+(@ingles, 'multipla', 'Which modal verb expresses strong advice?', 'can', 'should', 'may', 'might', 'B', '"Should" is commonly used to give advice.', 'facil'),
+(@ingles, 'dissertativa', 'Write three sentences using the present perfect with experiences you have had.', NULL, NULL, NULL, NULL, NULL, 'A correct answer uses "have/has" + past participle, such as "I have visited São Paulo".', 'medio'),
+(@ingles, 'dissertativa', 'Explain the difference between "there is" and "there are".', NULL, NULL, NULL, NULL, NULL, 'Use "there is" with singular nouns and "there are" with plural nouns.', 'facil'),
+(@ingles, 'dissertativa', 'Describe a daily routine using at least five verbs in the simple present.', NULL, NULL, NULL, NULL, NULL, 'A complete answer describes habitual actions with present-tense verbs.', 'medio');
+
+-- ---------------------------------------------------------------------
+-- Espanhol
+-- ---------------------------------------------------------------------
+INSERT INTO materias (id, nome, descricao, cor, icone) VALUES
+(11, 'Espanhol', 'Compreensão escrita, gramática e interpretação de textos em espanhol.', '#FB7185', 'livro');
+
+SET @espanhol = (SELECT id FROM materias WHERE nome = 'Espanhol');
+INSERT INTO questoes (materia_id, tipo, enunciado, alternativa_a, alternativa_b, alternativa_c, alternativa_d, resposta_correta, gabarito_comentario, dificuldade) VALUES
+(@espanhol, 'multipla', '¿Cuál es el artículo definido femenino singular?', 'el', 'la', 'los', 'unas', 'B', '"La" es el artículo definido femenino singular.', 'facil'),
+(@espanhol, 'multipla', '¿Cómo se dice "obrigado" em espanhol?', 'perdón', 'gracias', 'hola', 'adiós', 'B', 'Para agradecer, usa-se "gracias".', 'facil'),
+(@espanhol, 'multipla', 'Complete: "Yo ___ estudiante."', 'eres', 'somos', 'soy', 'es', 'C', 'Com "yo", usa-se a forma "soy" do verbo ser.', 'medio'),
+(@espanhol, 'multipla', 'Qual palavra significa "libro" em português?', 'livro', 'rato', 'cidade', 'caderno', 'A', '"Libro" significa "livro".', 'facil'),
+(@espanhol, 'multipla', '¿Cuál es el plural de "niño"?', 'niños', 'niñas', 'niñoes', 'niñes', 'A', 'O plural de "niño" é "niños".', 'facil'),
+(@espanhol, 'multipla', 'En "Ella ha viajado mucho", ¿qué tiempo verbal se utiliza?', 'pretérito indefinido', 'presente', 'pretérito perfecto compuesto', 'futuro', 'C', 'A construção "ha viajado" forma o pretérito perfeito composto.', 'medio'),
+(@espanhol, 'multipla', '¿Qué significa la palabra "desarrollo"?', 'desenvolvimento', 'descaso', 'desconforto', 'descanso', 'A', '"Desarrollo" significa desenvolvimento, crescimento ou evolução.', 'facil'),
+(@espanhol, 'multipla', 'Complete con el adjetivo posesivo: "Esta es ___ casa."', 'mi', 'mis', 'mío', 'mí', 'A', 'Para "casa", substantivo singular, usa-se "mi".', 'medio'),
+(@espanhol, 'multipla', '¿Cuál oración está en futuro?', 'Ayer fui al mercado.', 'Voy al mercado.', 'Iré al mercado.', 'Estoy yendo al mercado.', 'C', '"Iré" é a forma do futuro simples do verbo ir.', 'medio'),
+(@espanhol, 'multipla', '¿Qué conectivo expresa contraste?', 'aunque', 'porque', 'cuando', 'para', 'A', '"Aunque" indica contraste ou concessão.', 'medio'),
+(@espanhol, 'multipla', '¿Cuál es el antónimo de "grande"?', 'alto', 'pequeño', 'largo', 'nuevo', 'B', 'O antônimo de "grande" é "pequeño".', 'facil'),
+(@espanhol, 'multipla', 'La palabra "zapato" pertenece a la categoría de:', 'verbo', 'adjetivo', 'sustantivo', 'adverbio', 'C', '"Zapato" é um substantivo que designa um calçado.', 'facil'),
+(@espanhol, 'dissertativa', 'Escribe tres frases usando el presente de indicativo.', NULL, NULL, NULL, NULL, NULL, 'A resposta deve conter frases com verbos conjugados no presente, como "yo estudio", "ella trabaja" e "nosotros vivimos".', 'medio'),
+(@espanhol, 'dissertativa', 'Explique la diferencia entre "muy" y "mucho".', NULL, NULL, NULL, NULL, NULL, '"Muy" modifica adjetivos ou advérbios. "Mucho" modifica verbos ou aparece como determinante de substantivos.', 'medio'),
+(@espanhol, 'dissertativa', 'Describa una rutina diaria en español usando al menos cinco verbos.', NULL, NULL, NULL, NULL, NULL, 'A resposta completa deve usar verbos conjugados para ações do cotidiano, como despertar, desayunar, estudiar, comer, trabajar y dormir.', 'medio');

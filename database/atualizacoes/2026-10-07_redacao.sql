@@ -67,7 +67,7 @@ INSERT IGNORE INTO temas_redacao (titulo, eixo, textos_motivadores) VALUES
 ('Caminhos para reduzir o desperdício de alimentos no Brasil', 'Meio ambiente',
  'Grande parte dos alimentos se perde entre a colheita, o transporte, o comércio e a casa do consumidor.\n\nEnquanto isso, milhões de pessoas convivem com a fome, o que torna o desperdício também uma questão social.'),
 ('O descarte inadequado do lixo eletrônico em questão', 'Meio ambiente',
- 'Celulares, pilhas e baterias contêm metais pesados que contaminam o solo e a água quando descartados no lixo comum.\n\nA Política Nacional de Resíduos Sólidos prevê a logística reversa, que responsabiliza fabricantes pelo recolhimento desses produtos.'),
+ 'Celulares, pilhas e baterias contêm metais pesados que contaminam o solo e a água quando descartados no lixo comum.\n\nA Política Nacional de Resíduos Sólidos prevê a logística reversa, que responsabiliza fabricantes pelo recolhimento desses produtos.\n\nDados da ONU indicam que apenas uma pequena parcela do lixo eletrônico mundial é coletada e reciclada de forma adequada.\n\nEnquanto isso, o consumo acelerado de aparelhos estimula a substituição frequente de dispositivos que ainda poderiam ter uma vida útil maior.'),
 ('Desafios para a preservação da Amazônia', 'Meio ambiente',
  'A Amazônia abriga uma enorme biodiversidade e influencia o regime de chuvas de várias regiões do país.\n\nO desmatamento ilegal, o garimpo e as queimadas ameaçam a floresta e os povos que vivem nela.'),
 ('A crise hídrica e o uso consciente da água no Brasil', 'Meio ambiente',
