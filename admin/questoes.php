@@ -3,23 +3,42 @@
  * Listagem de questões com filtros (matéria, tipo, busca) e exclusão.
  */
 require_once __DIR__ . '/../includes/bootstrap.php';
-$usuario = exigir_login('admin');
+$usuario = exigir_login(['admin', 'professor']);
 $pdo = db();
+$materiaProfessor = materia_do_professor($usuario);
+if ($usuario['tipo'] === 'professor' && !$materiaProfessor) {
+    http_response_code(403);
+    exit('Este perfil de professor ainda não está vinculado a uma matéria.');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'excluir') {
     exigir_csrf();
-    $pdo->prepare('DELETE FROM questoes WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
+    $stmt = $pdo->prepare('DELETE FROM questoes WHERE id = ?' . ($materiaProfessor ? ' AND materia_id = ?' : ''));
+    $params = [(int) ($_POST['id'] ?? 0)];
+    if ($materiaProfessor) $params[] = (int) $materiaProfessor['id'];
+    $stmt->execute($params);
     toast('Questão excluída.');
     redirecionar('admin/questoes.php?' . http_build_query(array_intersect_key($_GET, array_flip(['materia', 'tipo', 'busca']))));
 }
 
 // Filtros
 $filtro_materia = (int) ($_GET['materia'] ?? 0);
+if ($materiaProfessor && $filtro_materia && $filtro_materia !== (int) $materiaProfessor['id']) {
+    http_response_code(403);
+    exit('Acesso negado para esta matéria.');
+}
+if ($materiaProfessor) {
+    $filtro_materia = (int) $materiaProfessor['id'];
+}
 $filtro_tipo    = in_array($_GET['tipo'] ?? '', ['multipla', 'dissertativa'], true) ? $_GET['tipo'] : '';
 $busca          = trim($_GET['busca'] ?? '');
 
 $where  = [];
 $params = [];
+if ($materiaProfessor) {
+    $where[] = 'q.materia_id = ?';
+    $params[] = (int) $materiaProfessor['id'];
+}
 if ($filtro_materia) {
     $where[] = 'q.materia_id = ?';
     $params[] = $filtro_materia;
@@ -65,7 +84,7 @@ require RAIZ_APP . '/includes/layout_inicio.php';
         <label class="campo__rotulo" for="f-materia">Matéria</label>
         <select class="select" id="f-materia" name="materia" data-enviar-ao-mudar>
             <option value="">Todas</option>
-            <?php foreach (materias_lista() as $m): ?>
+            <?php foreach (($materiaProfessor ? [$materiaProfessor] : materias_lista()) as $m): ?>
                 <option value="<?= (int) $m['id'] ?>" <?= $filtro_materia === (int) $m['id'] ? 'selected' : '' ?>><?= e($m['nome']) ?></option>
             <?php endforeach; ?>
         </select>

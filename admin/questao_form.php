@@ -4,8 +4,13 @@
  * Os campos de alternativas aparecem ou somem conforme o tipo (JS em questao_form.js).
  */
 require_once __DIR__ . '/../includes/bootstrap.php';
-$usuario = exigir_login('admin');
+$usuario = exigir_login(['admin', 'professor']);
 $pdo = db();
+$materiaProfessor = materia_do_professor($usuario);
+if ($usuario['tipo'] === 'professor' && !$materiaProfessor) {
+    http_response_code(403);
+    exit('Este perfil de professor ainda não está vinculado a uma matéria.');
+}
 
 $id = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $dados = [
@@ -23,6 +28,7 @@ if ($id && $_SERVER['REQUEST_METHOD'] !== 'POST') {
         toast('Questão não encontrada.', 'erro');
         redirecionar('admin/questoes.php');
     }
+    exigir_materia_do_professor($usuario, (int) $encontrada['materia_id']);
     $dados = array_merge($dados, array_map(fn($v) => $v ?? '', $encontrada));
 }
 
@@ -33,6 +39,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dados[$campo] = is_string($_POST[$campo] ?? null) ? trim($_POST[$campo]) : '';
     }
     $dados['materia_id'] = (int) $dados['materia_id'];
+
+    exigir_materia_do_professor($usuario, $dados['materia_id']);
+
+    if ($id) {
+        $stmt = $pdo->prepare('SELECT materia_id FROM questoes WHERE id = ?');
+        $stmt->execute([$id]);
+        $materiaAtual = $stmt->fetchColumn();
+        if ($materiaAtual === false) {
+            http_response_code(404);
+            exit('Questão não encontrada.');
+        }
+        exigir_materia_do_professor($usuario, (int) $materiaAtual);
+    }
 
     // Validação no servidor
     if (!materia_por_id($dados['materia_id'])) {
@@ -79,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare(
                 'UPDATE questoes SET materia_id = ?, tipo = ?, enunciado = ?, alternativa_a = ?, alternativa_b = ?,
                         alternativa_c = ?, alternativa_d = ?, resposta_correta = ?, gabarito_comentario = ?, dificuldade = ?
-                  WHERE id = ?'
-            )->execute([...$valores, $id]);
+                  WHERE id = ?' . ($materiaProfessor ? ' AND materia_id = ?' : '')
+            )->execute([...$valores, $id, ...($materiaProfessor ? [(int) $materiaProfessor['id']] : [])]);
             toast('Questão atualizada.');
         } else {
             $pdo->prepare(
@@ -119,8 +138,8 @@ require RAIZ_APP . '/includes/layout_inicio.php';
         <div class="campo<?= $erro_campo('materia_id') ?>">
             <label class="campo__rotulo" for="materia_id">Matéria</label>
             <select class="select" id="materia_id" name="materia_id" required>
-                <option value="">Selecione</option>
-                <?php foreach (materias_lista() as $m): ?>
+                <?php if (!$materiaProfessor): ?><option value="">Selecione</option><?php endif; ?>
+                <?php foreach (($materiaProfessor ? [$materiaProfessor] : materias_lista()) as $m): ?>
                     <option value="<?= (int) $m['id'] ?>" <?= (int) $dados['materia_id'] === (int) $m['id'] ? 'selected' : '' ?>><?= e($m['nome']) ?></option>
                 <?php endforeach; ?>
             </select>

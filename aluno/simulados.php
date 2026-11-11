@@ -44,9 +44,6 @@ $ultimo_geral = $stmt->fetch() ?: null;
 $total_materias_geral = count(array_filter($materias, fn($m) => (int) $m['objetivas'] > 0));
 $materia_sugerida = (int) ($_GET['materia'] ?? 0);
 
-/** Tempo estimado: ~3 min por questão objetiva (como no ENEM). */
-$tempo = fn(int $questoes) => formatar_minutos($questoes * 3);
-
 $titulo_pagina  = 'Simulados';
 $pagina_ativa   = 'simulados';
 $scripts_extras = ['simulados.js'];
@@ -75,7 +72,7 @@ require RAIZ_APP . '/includes/layout_inicio.php';
         <ul class="simulado-geral__fatos">
             <li><b class="numero"><?= SIMULADO_ENEM_TOTAL ?></b><span>questões</span></li>
             <li><b class="numero"><?= $total_materias_geral ?></b><span>matérias</span></li>
-            <li><b class="numero"><?= e($tempo(SIMULADO_ENEM_TOTAL)) ?></b><span>tempo estimado</span></li>
+            <li><b class="numero">5h</b><span>tempo estimado</span></li>
         </ul>
     </div>
     <div class="simulado-geral__acao">

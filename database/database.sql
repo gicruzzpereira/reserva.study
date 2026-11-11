@@ -22,7 +22,7 @@ CREATE TABLE usuarios (
     nome             VARCHAR(100)  NOT NULL,
     email            VARCHAR(150)  NOT NULL,
     senha            VARCHAR(255)  NOT NULL,                 -- hash gerado por password_hash()
-    tipo             ENUM('aluno','admin')        NOT NULL DEFAULT 'aluno',
+    tipo             ENUM('aluno','admin','professor','suporte') NOT NULL DEFAULT 'aluno',
     plano            ENUM('gratuito','premium')   NOT NULL DEFAULT 'gratuito',
     geracoes_ia_mes  TINYINT UNSIGNED NOT NULL DEFAULT 0,    -- gerações de IA usadas no mês corrente
     geracoes_ia_ref  CHAR(7)       NULL,                     -- mês de referência do contador (AAAA-MM)
@@ -48,6 +48,20 @@ CREATE TABLE materias (
     icone      VARCHAR(40)  NOT NULL DEFAULT 'livro',      -- chave do ícone SVG (includes/icones.php)
     criado_em  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uk_materias_nome (nome)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- VÍNCULO RBAC DE PROFESSORES A UMA ÚNICA MATÉRIA
+-- ---------------------------------------------------------------------
+CREATE TABLE professor_materias (
+    usuario_id INT UNSIGNED NOT NULL PRIMARY KEY,
+    materia_id INT UNSIGNED NOT NULL,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_professor_materia (materia_id),
+    CONSTRAINT fk_professor_materias_usuario FOREIGN KEY (usuario_id)
+        REFERENCES usuarios (id) ON DELETE CASCADE,
+    CONSTRAINT fk_professor_materias_materia FOREIGN KEY (materia_id)
+        REFERENCES materias (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -616,6 +630,27 @@ CREATE TABLE IF NOT EXISTS redacoes (
     KEY idx_redacoes_usuario (usuario_id, status),
     CONSTRAINT fk_redacoes_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE,
     CONSTRAINT fk_redacoes_tema FOREIGN KEY (tema_id) REFERENCES temas_redacao (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Notas manuais lançadas pela equipe docente (escala de 0 a 1000)
+CREATE TABLE IF NOT EXISTS notas_alunos (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    aluno_id       INT UNSIGNED NOT NULL,
+    materia_id     INT UNSIGNED NULL,
+    professor_id   INT UNSIGNED NOT NULL,
+    atualizado_por INT UNSIGNED NULL,
+    avaliacao      VARCHAR(150) NOT NULL,
+    nota           DECIMAL(6,2) UNSIGNED NOT NULL,
+    comentario     TEXT NULL,
+    data_avaliacao DATE NOT NULL,
+    criado_em      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_notas_aluno_data (aluno_id, data_avaliacao),
+    KEY idx_notas_materia (materia_id),
+    CONSTRAINT fk_notas_aluno FOREIGN KEY (aluno_id) REFERENCES usuarios (id) ON DELETE CASCADE,
+    CONSTRAINT fk_notas_materia FOREIGN KEY (materia_id) REFERENCES materias (id) ON DELETE SET NULL,
+    CONSTRAINT fk_notas_professor FOREIGN KEY (professor_id) REFERENCES usuarios (id) ON DELETE RESTRICT,
+    CONSTRAINT fk_notas_atualizado_por FOREIGN KEY (atualizado_por) REFERENCES usuarios (id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- Temas (INSERT IGNORE: não duplica se rodar de novo)

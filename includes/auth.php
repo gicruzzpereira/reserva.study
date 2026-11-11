@@ -31,11 +31,39 @@ function usuario_logado(): ?array
     return $usuario;
 }
 
+/** Retorna a matéria vinculada ao professor autenticado, se houver. */
+function materia_do_professor(array $usuario): ?array
+{
+    if (($usuario['tipo'] ?? '') !== 'professor') {
+        return null;
+    }
+    $stmt = db()->prepare(
+        'SELECT m.id, m.nome, m.cor, m.icone
+           FROM professor_materias pm JOIN materias m ON m.id = pm.materia_id
+          WHERE pm.usuario_id = ? LIMIT 1'
+    );
+    $stmt->execute([(int) $usuario['id']]);
+    return $stmt->fetch() ?: null;
+}
+
+/** Interrompe qualquer ação de professor sem matéria ou fora de sua disciplina. */
+function exigir_materia_do_professor(array $usuario, int $materiaId): void
+{
+    if (($usuario['tipo'] ?? '') !== 'professor') {
+        return;
+    }
+    $materia = materia_do_professor($usuario);
+    if (!$materia || (int) $materia['id'] !== $materiaId) {
+        http_response_code(403);
+        exit('Acesso negado para esta matéria.');
+    }
+}
+
 /**
- * Exige login (e, opcionalmente, um perfil). Retorna o usuário.
- * Aluno que tenta abrir a área admin (ou o contrário) é redirecionado ao próprio painel.
+ * Exige login (e, opcionalmente, um ou mais perfis). Quem não tiver acesso
+ * é redirecionado ao próprio painel.
  */
-function exigir_login(?string $tipo = null): array
+function exigir_login(string|array|null $tipo = null): array
 {
     $usuario = usuario_logado();
 
@@ -45,7 +73,8 @@ function exigir_login(?string $tipo = null): array
         redirecionar('auth/login.php');
     }
 
-    if ($tipo !== null && $usuario['tipo'] !== $tipo) {
+    $tipos_permitidos = $tipo === null ? [] : (array) $tipo;
+    if ($tipos_permitidos && !in_array($usuario['tipo'], $tipos_permitidos, true)) {
         toast('Você não tem permissão para acessar essa área.', 'erro');
         redirecionar(pagina_inicial($usuario));
     }
@@ -72,7 +101,12 @@ function exigir_login_api(?string $tipo = null): array
 /** Página inicial de cada perfil. */
 function pagina_inicial(array $usuario): string
 {
-    return $usuario['tipo'] === 'admin' ? 'admin/index.php' : 'aluno/painel.php';
+    return match ($usuario['tipo']) {
+        'admin' => 'admin/index.php',
+        'professor' => 'professor/index.php',
+        'suporte' => 'suporte/index.php',
+        default => 'aluno/painel.php',
+    };
 }
 
 /** Faz o login: regenera o id da sessão para evitar fixação de sessão. */

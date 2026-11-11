@@ -6,13 +6,25 @@
  */
 
 $eh_admin = ($usuario['tipo'] ?? '') === 'admin';
+$eh_professor = ($usuario['tipo'] ?? '') === 'professor';
+$eh_suporte = ($usuario['tipo'] ?? '') === 'suporte';
 
-if ($eh_admin) {
-    $itens_menu = [
-        'admin-painel' => ['Painel administrativo', 'admin/index.php', 'painel'],
+if ($eh_admin || $eh_professor) {
+    $itens_menu = $eh_admin ? [
+        'admin-painel' => [$eh_admin ? 'Painel administrativo' : 'Painel do professor', $eh_admin ? 'admin/index.php' : 'professor/index.php', 'painel'],
         'materias'     => ['Matérias', 'admin/materias.php', 'materias'],
         'questoes'     => ['Questões', 'admin/questoes.php', 'questoes'],
-        'usuarios'     => ['Usuários', 'admin/usuarios.php', 'usuarios'],
+        'alunos'       => ['Alunos e resultados', 'admin/alunos.php', 'usuarios'],
+        'notas'        => ['Notas', 'admin/notas.php', 'historico'],
+    ] : [
+        'admin-painel' => ['Painel do professor', 'professor/index.php', 'painel'],
+        'questoes' => ['Questoes', 'admin/questoes.php', 'questoes'],
+        'alunos' => ['Alunos e resultados', 'admin/alunos.php', 'usuarios'],
+        'notas' => ['Notas', 'admin/notas.php', 'historico'],
+    ];
+} elseif ($eh_suporte) {
+    $itens_menu = [
+        'suporte' => ['Solicitações de acesso', 'suporte/index.php', 'configuracoes'],
     ];
 } else {
     $itens_menu = [
@@ -20,6 +32,7 @@ if ($eh_admin) {
         'simulados'  => ['Simulados', 'aluno/simulados.php', 'simulado'],
         'redacao'    => ['Redação', 'aluno/redacao.php', 'redacao'],
         'historico'  => ['Histórico', 'aluno/historico.php', 'historico'],
+        'notas'      => ['Minhas notas', 'aluno/notas.php', 'historico'],
         'cronograma' => ['Cronograma', 'aluno/cronograma.php', 'cronograma'],
         'pomodoro'   => ['Pomodoro', 'aluno/pomodoro.php', 'pomodoro'],
         'revisoes'   => ['Revisões', 'aluno/revisoes.php', 'revisoes'],
@@ -33,7 +46,7 @@ $classe_item = fn(string $chave, string $extra = '') =>
 ?>
 <nav class="sidebar" aria-label="Navegação principal">
     <ul class="sidebar__lista">
-        <?php if (!$eh_admin): ?>
+        <?php if (!$eh_admin && !$eh_professor && !$eh_suporte): ?>
             <!-- Módulo premium de IA (estrela/brilho, como na referência) -->
             <li class="sidebar__ia">
                 <a href="<?= e(url('aluno/ia.php')) ?>"
@@ -62,7 +75,7 @@ $classe_item = fn(string $chave, string $extra = '') =>
 
         <li class="sidebar__separador sidebar__secundario" aria-hidden="true"></li>
 
-        <?php if (!$eh_admin): ?>
+        <?php if (!$eh_admin && !$eh_professor && !$eh_suporte): ?>
             <li class="sidebar__secundario">
                 <a href="<?= e(url('aluno/planos.php')) ?>"
                    class="<?= $classe_item('planos') ?>"

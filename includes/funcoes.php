@@ -168,6 +168,7 @@ function rotulo(string $valor): string
         'interpretacao' => 'Erro de interpretação',
         'gratuito' => 'Gratuito', 'premium' => 'Premium',
         'aluno' => 'Aluno', 'admin' => 'Administrador',
+        'professor' => 'Professor', 'suporte' => 'Suporte técnico',
     ];
     return $rotulos[$valor] ?? $valor;
 }

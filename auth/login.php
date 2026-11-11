@@ -50,8 +50,8 @@ $aba_ativa = 'entrar';
 require RAIZ_APP . '/includes/head.php';
 require RAIZ_APP . '/includes/auth_moldura_inicio.php';
 ?>
-                <h1 class="entrada__titulo">Olá, estudante</h1>
-                <p class="entrada__subtitulo">Bem-vindo ao Reserva Study</p>
+                <h1 class="entrada__titulo">Acesse sua conta</h1>
+                <p class="entrada__subtitulo">Entre como aluno, professor ou suporte técnico</p>
 
                 <?php if ($erro): ?>
                     <div class="aviso aviso--erro entrada__aviso" role="alert">
