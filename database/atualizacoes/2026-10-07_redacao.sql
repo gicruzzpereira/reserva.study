@@ -4,7 +4,7 @@
 -- Pode ser executado mais de uma vez sem duplicar nada.
 -- =====================================================================
 
-USE reserva_study;
+USE reservastudy;
 SET NAMES utf8mb4;
 
 CREATE TABLE IF NOT EXISTS temas_redacao (

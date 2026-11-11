@@ -4,12 +4,12 @@
 -- Compatível com MySQL 5.7+ / MariaDB 10.4+ (XAMPP)
 -- =====================================================================
 
-DROP DATABASE IF EXISTS reserva_study;
-CREATE DATABASE reserva_study
+DROP DATABASE IF EXISTS reservastudy;
+CREATE DATABASE reservastudy
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE reserva_study;
+USE reservastudy;
 
 SET NAMES utf8mb4;
 SET time_zone = '-03:00';

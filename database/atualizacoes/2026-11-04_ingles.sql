@@ -1,4 +1,4 @@
-USE reserva_study;
+USE reservastudy;
 SET NAMES utf8mb4;
 
 INSERT IGNORE INTO materias (id, nome, descricao, cor, icone)

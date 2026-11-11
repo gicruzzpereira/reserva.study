@@ -5,7 +5,7 @@
 -- (Instalações novas já recebem tudo pelo database.sql.)
 -- =====================================================================
 
-USE reserva_study;
+USE reservastudy;
 SET NAMES utf8mb4;
 
 INSERT INTO materias (nome, descricao, cor, icone)

@@ -10,7 +10,7 @@
 // --- Banco de dados (padrão do XAMPP: usuário root sem senha) ---
 define('DB_HOST', 'localhost');
 define('DB_PORTA', '3306');
-define('DB_NOME', 'reserva_study');
+define('DB_NOME', 'reservastudy');
 define('DB_USUARIO', 'root');
 define('DB_SENHA', '');
 

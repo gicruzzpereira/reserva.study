@@ -1,4 +1,4 @@
-USE reserva_study;
+USE reservastudy;
 SET NAMES utf8mb4;
 
 CREATE TABLE IF NOT EXISTS solicitacoes_senha (

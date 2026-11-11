@@ -5,7 +5,7 @@
 -- novas se ainda tiver menos de 15.
 -- =====================================================================
 
-USE reserva_study;
+USE reservastudy;
 SET NAMES utf8mb4;
 
 -- Simulado geral (todas as matérias)
