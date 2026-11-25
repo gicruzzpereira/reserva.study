@@ -9,3 +9,5 @@ da pasta `database/atualizacoes/` no banco `reservastudy`. A atualização
 `2026-11-11_acessos_e_notas.sql` habilita os perfis de professor e suporte e cria
 a tabela de notas manuais (escala de 0 a 1000). Após a atualização, um administrador
 cria as contas da equipe em **Usuários**; o login é feito pela tela habitual.
+A atualização `2026-11-25_professor_teste.sql` cria a conta de professor para
+tutoriais, com acesso a todas as matérias.

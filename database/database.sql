@@ -23,6 +23,7 @@ CREATE TABLE usuarios (
     email            VARCHAR(150)  NOT NULL,
     senha            VARCHAR(255)  NOT NULL,                 -- hash gerado por password_hash()
     tipo             ENUM('aluno','admin','professor','suporte') NOT NULL DEFAULT 'aluno',
+    acesso_todas_materias TINYINT(1) NOT NULL DEFAULT 0,
     plano            ENUM('gratuito','premium')   NOT NULL DEFAULT 'gratuito',
     geracoes_ia_mes  TINYINT UNSIGNED NOT NULL DEFAULT 0,    -- gerações de IA usadas no mês corrente
     geracoes_ia_ref  CHAR(7)       NULL,                     -- mês de referência do contador (AAAA-MM)

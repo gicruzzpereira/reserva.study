@@ -1,5 +1,5 @@
 /**
- * Telas de entrada: carrossel de recursos e botão "Entrar com a conta de teste".
+ * Telas de entrada: carrossel de recursos.
  */
 (function () {
     'use strict';
@@ -39,14 +39,4 @@
         carrossel.addEventListener('mouseleave', iniciar);
         iniciar();
     }
-
-    /* ---------- Conta de teste ---------- */
-    document.querySelector('[data-conta-teste]')?.addEventListener('click', (evento) => {
-        const botao = evento.currentTarget;
-        const form = document.getElementById('form-login');
-        form.querySelector('#email').value = botao.dataset.email;
-        form.querySelector('#senha').value = botao.dataset.senha;
-        botao.disabled = true;
-        form.requestSubmit();
-    });
 })();

@@ -83,13 +83,6 @@ require RAIZ_APP . '/includes/auth_moldura_inicio.php';
                     <p class="texto-xs texto-secundario" style="margin: -8px 0 4px;">Por segurança, todas as senhas são criptografadas e não podem ser visualizadas.</p>
 
                     <button type="submit" class="btn btn--primario btn--bloco entrada__botao">Entrar</button>
-
-                    <div class="entrada__ou"><span>ou</span></div>
-
-                    <button type="button" class="btn btn--contorno btn--bloco entrada__teste" data-conta-teste
-                            data-email="aluno@reservastudy.com" data-senha="aluno123">
-                        <?= icone('usuario', 'icone--sm') ?> Entrar com a conta de teste
-                    </button>
                 </form>
 
                 <p class="entrada__trocar">Ainda não tem conta? <a href="<?= e(url('auth/cadastro.php')) ?>">Criar conta</a></p>

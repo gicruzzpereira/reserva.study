@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 $usuario = exigir_login(['admin', 'professor']);
 $pdo = db();
 $materiaProfessor = materia_do_professor($usuario);
-if ($usuario['tipo'] === 'professor' && !$materiaProfessor) {
+if ($usuario['tipo'] === 'professor' && !$materiaProfessor && !professor_acesso_todas_materias($usuario)) {
     http_response_code(403);
     exit('Este perfil de professor ainda não está vinculado a uma matéria.');
 }

@@ -14,7 +14,7 @@ function usuario_logado(): ?array
         $usuario = null;
         if (!empty($_SESSION['usuario_id'])) {
             $stmt = db()->prepare(
-                'SELECT id, nome, email, tipo, plano, geracoes_ia_mes, geracoes_ia_ref, serie, escola, objetivo, curso_desejado, foto, ativo, criado_em
+                'SELECT id, nome, email, tipo, acesso_todas_materias, plano, geracoes_ia_mes, geracoes_ia_ref, serie, escola, objetivo, curso_desejado, foto, ativo, criado_em
                    FROM usuarios WHERE id = ?'
             );
             $stmt->execute([$_SESSION['usuario_id']]);
@@ -37,6 +37,9 @@ function materia_do_professor(array $usuario): ?array
     if (($usuario['tipo'] ?? '') !== 'professor') {
         return null;
     }
+    if (professor_acesso_todas_materias($usuario)) {
+        return null;
+    }
     $stmt = db()->prepare(
         'SELECT m.id, m.nome, m.cor, m.icone
            FROM professor_materias pm JOIN materias m ON m.id = pm.materia_id
@@ -46,10 +49,17 @@ function materia_do_professor(array $usuario): ?array
     return $stmt->fetch() ?: null;
 }
 
+/** Indica se o professor tem acesso global às matérias. */
+function professor_acesso_todas_materias(array $usuario): bool
+{
+    return ($usuario['tipo'] ?? '') === 'professor'
+        && (int) ($usuario['acesso_todas_materias'] ?? 0) === 1;
+}
+
 /** Interrompe qualquer ação de professor sem matéria ou fora de sua disciplina. */
 function exigir_materia_do_professor(array $usuario, int $materiaId): void
 {
-    if (($usuario['tipo'] ?? '') !== 'professor') {
+    if (($usuario['tipo'] ?? '') !== 'professor' || professor_acesso_todas_materias($usuario)) {
         return;
     }
     $materia = materia_do_professor($usuario);

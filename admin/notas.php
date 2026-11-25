@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 $usuario = exigir_login(['admin', 'professor']);
 $pdo = db();
 $materiaProfessor = materia_do_professor($usuario);
-if ($usuario['tipo'] === 'professor' && !$materiaProfessor) {
+if ($usuario['tipo'] === 'professor' && !$materiaProfessor && !professor_acesso_todas_materias($usuario)) {
     http_response_code(403);
     exit('Este perfil de professor ainda nao esta vinculado a uma materia.');
 }
@@ -162,9 +162,9 @@ $sqlNotas =
        JOIN usuarios a ON a.id = n.aluno_id
        LEFT JOIN materias m ON m.id = n.materia_id
        JOIN usuarios p ON p.id = n.professor_id
-      ' . ($materiaProfessor ? 'WHERE n.professor_id = ? ' : '') . 'ORDER BY n.data_avaliacao DESC, n.id DESC';
+      ' . ($usuario['tipo'] === 'professor' ? 'WHERE n.professor_id = ? ' : '') . 'ORDER BY n.data_avaliacao DESC, n.id DESC';
 $stmtNotas = $pdo->prepare($sqlNotas);
-if ($materiaProfessor) {
+if ($usuario['tipo'] === 'professor') {
     $stmtNotas->execute([(int) $usuario['id']]);
 } else {
     $stmtNotas->execute();
